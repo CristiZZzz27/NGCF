@@ -63,7 +63,7 @@ if __name__ =='__main__' :
                   criterion=criterion,
                   top_k=args.top_k,
                   )
-    train.train()
+    trained_model=train.train()
     print('------------train end------------')
 
     eval = Evaluation(test_dataloader=test_loader,
@@ -72,5 +72,7 @@ if __name__ =='__main__' :
                       device=device,)
 
     end_time = datetime.now()
-    torch.save(model,'/content//gdrive//MyDrive//NGCF//NGCF.pth')
+    torch.save(trained_model[0],'/content//gdrive//MyDrive//NGCF//NGCF1.pth')
+    torch.save(trained_model[1],'/content//gdrive//MyDrive//NGCF//NGCF2.pth')
+    torch.save(trained_model[2],'/content//gdrive//MyDrive//NGCF//NGCF3.pth')
     print('Duration: {}'.format(end_time - start_time))

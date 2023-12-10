@@ -47,7 +47,8 @@ class Train():
                               top_k=top_k,
                               device=device)
             HR,NDCG = eval.get_metric()
-            print(f'Epoch: {(epoch + 1):04}, {criterion._get_name()}= {avg_cost:.9f}, NDCG@{top_k}:{NDCG:.4f},HR@{top_k}:{HR:.4f}')
+            print(f'Epoch: {(epoch + 1):04}, {criterion._get_name()}= {avg_cost:.9f}, NDCG: {top_k}:{NDCG:.4f},HR: {top_k}:{HR:.4f}')
+        return user_embeddings, pos_item_embeddings, neg_item_embeddings
 
 
 
