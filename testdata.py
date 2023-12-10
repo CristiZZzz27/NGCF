@@ -156,8 +156,12 @@ if torch.cuda.is_available():
 test_set = MovieLens(df=test_df,total_df=total_df,train=False,ng_ratio=99)
 
 
-load_model = torch.load("pretrain\\NGCF.pth")[2]
-load_model.cuda()
+load_model1 = torch.load("pretrain\\NGCF1.pth")
+load_model2 = torch.load("pretrain\\NGCF2.pth")
+load_model3 = torch.load("pretrain\\NGCF3.pth")
+load_model1.cuda()
+load_model2.cuda()
+load_model3.cuda()
 
 test_loader = DataLoader(test_set,
                          batch_size=100,
@@ -169,15 +173,16 @@ test_loader = DataLoader(test_set,
 criterion = BPR_Loss(batch_size=256,decay_ratio=1e-5)
 avg_cost = 0
 total_batch = len(test_loader)
-for idx,(users,pos_items,neg_items) in enumerate(test_loader):
-    users,pos_items,neg_items = users.to(device),pos_items.to(device),neg_items.to(device)
-    user_embeddings, pos_item_embeddings, neg_item_embeddings= load_model(users,pos_items,neg_items,use_dropout=True)
-    cost  = criterion(user_embeddings,pos_item_embeddings,neg_item_embeddings)
-    avg_cost+=cost
-avg_cost = avg_cost/total_batch
-eval = Evaluation(test_dataloader=test_loader,
-                    model = load_model,
-                    top_k=10,
-                    device=device)
-HR,NDCG = eval.get_metric()
+cost  = criterion(load_model1,load_model2,load_model3)
+
+pred_matrix = torch.matmul(load_model1,torch.transpose(itemload_model1_embeddings,0,1))
+
+_, pred_indices = torch.topk(pred_matrix[0], self.top_k)
+
+recommends = torch.take(
+    items, pred_indices).cpu().numpy().tolist()
+
+gt_item = items[0].item()
+HR.append(self.hit(gt_item=gt_item,pred_items=recommends))
+NDCG.append(self.Ndcg(gt_item=gt_item,pred_items=recommends))
 print("HR: {:.3f}\tNDCG: {:.3f}".format(HR, NDCG))

@@ -72,7 +72,7 @@ if __name__ =='__main__' :
                       device=device,)
 
     end_time = datetime.now()
-    torch.save(trained_model[0],'/content//gdrive//MyDrive//NGCF//NGCF1.pth')
-    torch.save(trained_model[1],'/content//gdrive//MyDrive//NGCF//NGCF2.pth')
-    torch.save(trained_model[2],'/content//gdrive//MyDrive//NGCF//NGCF3.pth')
+    torch.save(model.state_dict,'/content//gdrive//MyDrive//NGCF//NGCF.pth')
+    # torch.save(trained_model[1],'/content//gdrive//MyDrive//NGCF//NGCF2.pth')
+    # torch.save(trained_model[2],'/content//gdrive//MyDrive//NGCF//NGCF3.pth')
     print('Duration: {}'.format(end_time - start_time))
